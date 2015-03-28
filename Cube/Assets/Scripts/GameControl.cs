@@ -3,7 +3,7 @@ using System.Collections;
 
 public class GameControl : MonoBehaviour
 {
-    public PlayerCube playerCube { get; private set; }
+    public PlayerCharacter playerCharacter { get; private set; }
     public Stage stage { get; private set; }
 
     private static GameControl instance;
@@ -34,35 +34,39 @@ public class GameControl : MonoBehaviour
 	    {
 	        InputProcess();
 	    }
+
+	    playerCharacter.ManualUpdate();
 	}
 
     private void SpawnPlayerCube()
     {
         Vector3 startPosition = stage.GetStartPosition();
 
-        GameObject cube = Instantiate(Resources.Load("PlayerCube")) as GameObject;
-        playerCube = cube.GetComponent<PlayerCube>();
-        playerCube.fastTransform.parent = stage.fastTransform;
-        playerCube.transform.localPosition = startPosition;
+        GameObject cube = Instantiate(Resources.Load("PlayerCharacter")) as GameObject;
+        playerCharacter = cube.GetComponent<PlayerCharacter>();
+        playerCharacter.fastTransform.parent = stage.fastTransform;
+        playerCharacter.transform.localPosition = startPosition;
     }
 
     public void InputProcess()
     {
+        playerCharacter.Stop();
+
         if (Input.GetKey(KeyCode.UpArrow))
         {
-            playerCube.Up();
+            playerCharacter.Up();
         }
         else if (Input.GetKey(KeyCode.DownArrow))
         {
-            playerCube.Down();
+            playerCharacter.Down();
         }
         if (Input.GetKey(KeyCode.LeftArrow))
         {
-            playerCube.Left();
+            playerCharacter.Left();
         }
         else if (Input.GetKey(KeyCode.RightArrow))
         {
-            playerCube.Right();
+            playerCharacter.Right();
         }
     }
 }

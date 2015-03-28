@@ -27,11 +27,13 @@ public class Stage : MonoBehaviour
     public Vector3 GetStartPosition()
     {
         StageCube startCube = stageCubes.Find(x => x.isStartPosition);
-        return startCube.fastTransform.position + new Vector3(0, 1, 0);
+        return startCube.fastTransform.position + new Vector3(0, 0.5f, 0);
     }
 
     public bool IsExistStageCube(Vector3 worldPosition)
     {
+        worldPosition += new Vector3(0, 0.5f, 0);
+
         foreach (StageCube stageCube in stageCubes)
         {
             if (stageCube.IsExist(worldPosition))
@@ -53,7 +55,7 @@ public class Stage : MonoBehaviour
 
     public void GravityProcess()
     {
-        Vector3 originPosition = GameControl.Instance.playerCube.fastTransform.position;
+        Vector3 originPosition = GameControl.Instance.playerCharacter.fastTransform.position;
         
         bool result = GravityProcess(originPosition, Vector3.down);
 
