@@ -13,8 +13,6 @@ public class MoveRange : MonoBehaviour
 	void Start ()	
     {
 	    CreateCells();
-
-	    ShowMoveRange(3);
     }
 
     void CreateCells()
@@ -40,6 +38,7 @@ public class MoveRange : MonoBehaviour
                 cell.transform.parent = transform;
                 cell.transform.localPosition = pos;
                 moveCells.Add(cell);
+                cell.SetActive(false);
             }
         }
     }
