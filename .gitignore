@@ -1,2 +1,7 @@
 Cube/Library/AnnotationManager
 Cube/Library/
+Cube/Temp/
+Cube/obj/
+Cube/UnityVS.Cube.CSharp.csproj
+Cube/UnityVS.Cube.sln
+Cube/UnityVS.Cube.v12.suo
