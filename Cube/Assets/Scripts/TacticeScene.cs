@@ -24,6 +24,7 @@ public class TacticeScene : MonoBehaviour
                 {
                     TacticePlayer tacticePlayer = rayCastHit.transform.GetComponent<TacticePlayer>();
                     moveRange.ShowMoveRange(tacticePlayer.moveRange);
+
                 }
             }
         }
