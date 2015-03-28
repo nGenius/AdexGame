@@ -3,14 +3,15 @@
 
 public class TacticePlayer : MonoBehaviour
 {
-    private float moveRange;
+    public int moveRange;
     private bool isSelected;
     public bool isShowMoveRange;
 
     //move
     public float moveVeolocity;
-    private bool isMoveing;
+    private bool isMoving;
     private Vector3 destPos;
+    private bool isArriveForwardMove;
 	// Use this for initialization
 	void Start () {
 	
@@ -19,9 +20,10 @@ public class TacticePlayer : MonoBehaviour
 	// Update is called once per frame
 	void Update () {
 
-	    if (isMoveing)
+	    if (isMoving)
 	    {
-	        
+	        //Vector3 calcPos = transform.position;
+	        //Vector3.MoveTowards(transform.position, )
 	    }
 	}
 
@@ -29,7 +31,5 @@ public class TacticePlayer : MonoBehaviour
     {
         
     }
-
-   
 
 }
