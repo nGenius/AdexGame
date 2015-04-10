@@ -4,14 +4,13 @@
 public class TacticePlayer : MonoBehaviour
 {
     public int moveRange;
-    private bool isSelected;
     public bool isShowMoveRange;
-
-    //move
     public float moveVeolocity;
+
     private bool isMoving;
     private Vector3 destPos;
     private bool isArriveForwardMove;
+    private bool isSelected;
 	// Use this for initialization
 	void Start () {
 	
@@ -32,4 +31,10 @@ public class TacticePlayer : MonoBehaviour
         
     }
 
+    public void MoveToCell(Transform transform)
+    {
+        Debug.Log("move..");
+
+
+    }
 }

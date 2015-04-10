@@ -18,10 +18,12 @@ public class Stage : MonoBehaviour
     private Quaternion originRotation;
     private float degree;
 
+    
     void Awake()
     {
         stageCubes = new List<StageCube>(GetComponentsInChildren<StageCube>());
         fastTransform = transform;
+        
     }
 
     public Vector3 GetStartPosition()
