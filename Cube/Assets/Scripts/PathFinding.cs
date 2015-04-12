@@ -3,35 +3,17 @@ using System.Security.AccessControl;
 using UnityEngine;
 using System.Collections;
 
-public class PathNode
-{
-    public bool movable;
-    public int nodePosX;
-    public int nodePosY;
-
-    //실제 위치
-    public Vector3 position;
-    public PathNode parentNode;
-    public float gValue;
-
-    public bool Equals(PathNode obj)
-    {
-        return nodePosX == obj.nodePosX && nodePosY == obj.nodePosY;
-    }
-}
-
-
 //tactice용 A* path finding(대각선 이동이 없다. 즉 네방향 검사)
 //F = G + H
-//G - 시작점 A부터 새로운 사각형까지의 이동비용(직각이면 10. 대각선은 1.4-루트2)
+//G - 시작점 A부터 새로운 사각형까지의 이동비용(직각이면 1. 대각선은 1.4-루트2)
 //H - 얻어진 사각형으로부터 최종목적지점까지의 이동비용. 가로세로 거리
+using UnityEngine.UI;
+
 public class PathFinding
 {
 
-    private const int MAX_MAP_NODE_NUM = 10;
-
-    private PathNode[,] nodes = new PathNode[MAX_MAP_NODE_NUM, MAX_MAP_NODE_NUM];
-
+    public const int MAX_MAP_NODE_NUM = 10;
+    private PathNode[,] nodes;
     private Stack<PathNode> findPaths = new Stack<PathNode>();
     private List<PathNode> openList = new List<PathNode>();
     private List<PathNode> closeList = new List<PathNode>();
@@ -39,43 +21,45 @@ public class PathFinding
     
     //private PathNode current
 
-    public void CreateTestNodes()
-    {
-        for (int i = 0; i < MAX_MAP_NODE_NUM; ++i)
-        {
-            for (int j = 0; j < MAX_MAP_NODE_NUM; ++j)
-            {
-                nodes[i, j] = new PathNode();
-                nodes[i, j].nodePosX = i;
-                nodes[i, j].nodePosY = j;
-                nodes[i, j].movable = true;
-            }
-        }
-    }
+
     //찾으면 true 못찾으면 false
-    public bool FindPath(PathNode startNode, PathNode goalNode)
+    public Stack<PathNode> FindPath(PathNode[,] nodes, PathNode startNode, PathNode goalNode)
     {
+        this.nodes = nodes;
         this.goalNode = goalNode;
+
+        foreach (PathNode node in nodes)
+        {
+            node.parentNode = null;
+        }
 
         PathNode currentLowFNode = startNode;
 
+        openList.Clear();
+        closeList.Clear();
+        findPaths.Clear();
+
         while (openList.Find(x => x.Equals(goalNode)) == null) 
         {
+            Debug.Log(currentLowFNode.Equals(goalNode));
             closeList.Add(currentLowFNode);
 
-            //대각선 이동은 없으므로 g값은 10으로 한다.
-            InsertOpenList(currentLowFNode, GetNode(currentLowFNode.nodePosX + 1, currentLowFNode.nodePosY), 1);
-            InsertOpenList(currentLowFNode, GetNode(currentLowFNode.nodePosX - 1, currentLowFNode.nodePosY), 1);
-            InsertOpenList(currentLowFNode, GetNode(currentLowFNode.nodePosX, currentLowFNode.nodePosY + 1), 1);
-            InsertOpenList(currentLowFNode, GetNode(currentLowFNode.nodePosX, currentLowFNode.nodePosY - 1), 1);
+            //대각선 이동은 없으므로 g값은 1로 한다.
+            InsertOpenList(currentLowFNode, GetNode(currentLowFNode.nodePosX + 1, currentLowFNode.nodePosZ), 1);
+            InsertOpenList(currentLowFNode, GetNode(currentLowFNode.nodePosX - 1, currentLowFNode.nodePosZ), 1);
+            InsertOpenList(currentLowFNode, GetNode(currentLowFNode.nodePosX, currentLowFNode.nodePosZ + 1), 1);
+            InsertOpenList(currentLowFNode, GetNode(currentLowFNode.nodePosX, currentLowFNode.nodePosZ - 1), 1);
 
             currentLowFNode = FindLowFNode();
+            if (currentLowFNode.Equals(goalNode))
+            {
+                break;
+            }
             openList.Remove(currentLowFNode);
         }
 
 
         PathNode findedNode = currentLowFNode;
-        findPaths.Push(goalNode);
         findPaths.Push(findedNode);
         while (findedNode.parentNode != null)
         {
@@ -83,12 +67,12 @@ public class PathFinding
             findedNode = findedNode.parentNode;
         }
 
-        return false;
+        return findPaths;
     }
 
     private PathNode GetNode(int posX, int posY)
     {
-        if (posX < 0 || posX >= MAX_MAP_NODE_NUM || posY < 0 || posY >= MAX_MAP_NODE_NUM)
+        if (posX < 0 || posX >= TacticeScene.MAX_MAP_NODE_NUM || posY < 0 || posY >= TacticeScene.MAX_MAP_NODE_NUM)
         {
             return null;
         }
@@ -117,7 +101,7 @@ public class PathFinding
         foreach (PathNode node in openList)
         {
             float f = node.gValue + distanceToGoal(node);
-            if (f < lowF)
+            if (f <= lowF)
             {
                 lowF = f;
                 lowFNode = node;
@@ -131,6 +115,6 @@ public class PathFinding
     private float distanceToGoal(PathNode node)
     {
         return Mathf.Abs(node.nodePosX - goalNode.nodePosX) 
-            + Mathf.Abs(node.nodePosY - goalNode.nodePosY);
+            + Mathf.Abs(node.nodePosZ - goalNode.nodePosZ);
     }
 }
