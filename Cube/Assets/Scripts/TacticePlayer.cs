@@ -1,6 +1,75 @@
 ﻿using System.Collections.Generic;
+using JetBrains.Annotations;
+using UnityEditorInternal;
 using UnityEngine;
 
+
+enum AIMsgType
+{
+    MSG_SELECTED,
+    MSG_MOVED,
+}
+
+public interface PlayerState
+{
+    void Enter();
+
+    void Excute();
+
+    void Exit();
+}
+
+public class WaitState : PlayerState
+{
+    public void Enter()
+    {
+        
+    }
+
+    public void Excute()
+    {
+        
+    }
+
+    public void Exit()
+    {
+        
+    }
+}
+
+struct Telegram
+{
+        
+}
+public class StateMachince
+{
+    private PlayerState currentState;
+    private PlayerState previousState;
+
+    public void SetCurrentState(PlayerState state)
+    {
+        currentState = state;
+    }
+
+    public void ChangeState(PlayerState newState)
+    {
+        previousState = currentState;
+
+        currentState.Exit();
+
+        currentState = newState;
+
+        currentState.Enter();
+    }
+
+    public void RevertToPreviousState()
+    {
+        ChangeState(previousState);
+    }
+
+    public void 
+
+}
 
 public class TacticePlayer : MonoBehaviour
 {
@@ -20,7 +89,7 @@ public class TacticePlayer : MonoBehaviour
     private Vector3 arrivePosition;
 
     void Start () {
-	
+	    
 	}
 	
 	// Update is called once per frame
@@ -79,5 +148,10 @@ public class TacticePlayer : MonoBehaviour
         isMoving = true;
         movePaths = paths;
         NextMovePath();
+    }
+
+    public void MouseLButtonEvent(RaycastHit rayCastHit)
+    {
+       
     }
 }

@@ -17,7 +17,7 @@ public class PathFinding
     private Stack<PathNode> findPaths = new Stack<PathNode>();
     private List<PathNode> openList = new List<PathNode>();
     private List<PathNode> closeList = new List<PathNode>();
-    private PathNode goalNode = new PathNode();
+    private PathNode goalNode;
     
     //private PathNode current
 
@@ -100,7 +100,7 @@ public class PathFinding
 
         foreach (PathNode node in openList)
         {
-            float f = node.gValue + distanceToGoal(node);
+            float f = node.gValue + distanceToGoal(node, goalNode);
             if (f <= lowF)
             {
                 lowF = f;
@@ -112,7 +112,7 @@ public class PathFinding
     }
 
     //두 노드간의 h를 구하는 함수
-    private float distanceToGoal(PathNode node)
+    public float distanceToGoal(PathNode node, PathNode goalNode)
     {
         return Mathf.Abs(node.nodePosX - goalNode.nodePosX) 
             + Mathf.Abs(node.nodePosZ - goalNode.nodePosZ);

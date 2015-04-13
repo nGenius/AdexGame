@@ -55,11 +55,16 @@ public class MoveRange : MonoBehaviour
         SearchMoveRangeRecursive(target.transform.position, 0, moveRange);
     }
 
+    public void HideMoveRange()
+    {
+        moveCells.ForEach(x => x.SetActive(false));
+    }
+
     private void SearchMoveRangeCell(Vector3 checkPos)
     {
         GameObject findCell 
-            = moveCells.Find(x => x.transform.localPosition.x.Equals(checkPos.x)
-                && x.transform.localPosition.z.Equals(checkPos.z));
+            = moveCells.Find(x => x.transform.position.x.Equals(checkPos.x)
+                && x.transform.position.z.Equals(checkPos.z));
 
         if (findCell != null)
         {

@@ -11,22 +11,19 @@ public class TacticeScene : MonoBehaviour
     private PathFinding pathFinding = new PathFinding();
     private PathNode[,] nodes = new PathNode[MAX_MAP_NODE_NUM, MAX_MAP_NODE_NUM];
 
+
+    public delegate void MouseLButtonDownEvent(RaycastHit rayCastHit);
+    public event MouseLButtonDownEvent mouseLButtonEvent;
+
+
+
     // Use this for initialization
     private void Start()
     {
         CreateTestTiles();
-
         selectedTacticePlayer.currentNode = nodes[0, 0];
-
-        /*PathNode startNode = new PathNode();
-        startNode.nodePosX = 1;
-        startNode.nodePosZ = 1;
-
-        PathNode goalNode = new PathNode();
-        goalNode.nodePosX = 3;
-        goalNode.nodePosZ = 3;*/
-
-        //pathFinding.FindPath(nodes, selectedTacticePlayer.currentNode, goalNode);
+        mouseLButtonEvent += selectedTacticePlayer.MouseLButtonEvent;
+        mouseLButtonEvent += MouseLButtonEventProc;
     }
 
     public void CreateTestTiles()
@@ -52,37 +49,47 @@ public class TacticeScene : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-
         if (Input.GetMouseButtonDown(0))
         {
             RaycastHit rayCastHit;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out rayCastHit))
             {
-                if (rayCastHit.collider && rayCastHit.transform.tag == "Player")
+                if (mouseLButtonEvent != null)
                 {
-                    TacticePlayer tacticePlayer = rayCastHit.transform.GetComponent<TacticePlayer>();
-                    moveRange.ShowMoveRange(tacticePlayer.moveRange);
-                    selectedTacticePlayer = tacticePlayer;
-                }
-
-                if (rayCastHit.collider && rayCastHit.transform.tag == "MoveRange")
-                {
-                    selectedTacticePlayer.MoveToCell(rayCastHit.transform);
-                }
-
-                if (rayCastHit.collider && rayCastHit.transform.tag == "PathNode")
-                {
-                    MapTile mapTile = rayCastHit.transform.GetComponent<MapTile>();
-                    Stack<PathNode> paths = pathFinding.FindPath(nodes, selectedTacticePlayer.currentNode, mapTile.pathNode);
-                    foreach (PathNode node in paths)
-                    {
-                        Debug.Log("node.nodePosX : " + node.nodePosX + ", node.nodePosZ  : " + node.nodePosZ);                        
-                    }
-                    selectedTacticePlayer.MoveToPaths(paths);
+                    mouseLButtonEvent(rayCastHit);
                 }
             }
         }
     }
+
+    private void MouseLButtonEventProc(RaycastHit rayCastHit)
+    {
+        if (rayCastHit.collider)
+        {
+            if (rayCastHit.transform.tag == "Player")
+            {
+                TacticePlayer tacticePlayer = rayCastHit.transform.GetComponent<TacticePlayer>();
+                moveRange.ShowMoveRange(tacticePlayer.moveRange);
+                selectedTacticePlayer = tacticePlayer;   
+            }
+            else if (rayCastHit.transform.tag == "MoveRange")
+            {
+                selectedTacticePlayer.MoveToCell(rayCastHit.transform);
+            }
+            else if (rayCastHit.transform.tag == "PathNode")
+            {
+                MapTile mapTile = rayCastHit.transform.GetComponent<MapTile>();
+                float distance = pathFinding.distanceToGoal(selectedTacticePlayer.currentNode, mapTile.pathNode);
+                if (distance <= selectedTacticePlayer.moveRange)
+                {
+                    Stack<PathNode> paths = pathFinding.FindPath(nodes, selectedTacticePlayer.currentNode, mapTile.pathNode);
+                    selectedTacticePlayer.MoveToPaths(paths);       
+                    moveRange.HideMoveRange();
+                }
+                Debug.Log(distance);
+            }
+        }
+    }
 }
-    ;
+    
