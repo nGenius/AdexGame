@@ -67,7 +67,6 @@ public class StateMachince
         ChangeState(previousState);
     }
 
-    public void 
 
 }
 
