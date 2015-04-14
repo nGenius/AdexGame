@@ -72,6 +72,7 @@ public class TacticeScene : MonoBehaviour
                 TacticePlayer tacticePlayer = rayCastHit.transform.GetComponent<TacticePlayer>();
                 moveRange.ShowMoveRange(tacticePlayer.moveRange);
                 selectedTacticePlayer = tacticePlayer;   
+                MessageDispatcher.Instance().DispatchMessage(0.0f, null, tacticePlayer.GetAIAgent(), AIMsgType.MSG_SELECTED);
             }
             else if (rayCastHit.transform.tag == "MoveRange")
             {
@@ -79,15 +80,17 @@ public class TacticeScene : MonoBehaviour
             }
             else if (rayCastHit.transform.tag == "PathNode")
             {
-                MapTile mapTile = rayCastHit.transform.GetComponent<MapTile>();
-                float distance = pathFinding.distanceToGoal(selectedTacticePlayer.currentNode, mapTile.pathNode);
-                if (distance <= selectedTacticePlayer.moveRange)
+                if (selectedTacticePlayer != null && selectedTacticePlayer.Movabable())
                 {
-                    Stack<PathNode> paths = pathFinding.FindPath(nodes, selectedTacticePlayer.currentNode, mapTile.pathNode);
-                    selectedTacticePlayer.MoveToPaths(paths);       
-                    moveRange.HideMoveRange();
+                    MapTile mapTile = rayCastHit.transform.GetComponent<MapTile>();
+                    float distance = pathFinding.distanceToGoal(selectedTacticePlayer.currentNode, mapTile.pathNode);
+                    if (distance <= selectedTacticePlayer.moveRange)
+                    {
+                        Stack<PathNode> paths = pathFinding.FindPath(nodes, selectedTacticePlayer.currentNode, mapTile.pathNode);
+                        selectedTacticePlayer.MoveToPaths(paths);
+                        moveRange.HideMoveRange();
+                    }
                 }
-                Debug.Log(distance);
             }
         }
     }
