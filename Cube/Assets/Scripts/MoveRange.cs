@@ -7,7 +7,7 @@ public class MoveRange : MonoBehaviour
     public int cellRowNum;
     public float cellWidth = 1.0f;
 
-    private List<GameObject> moveCells = new List<GameObject>();
+    private List<GameObject> cells = new List<GameObject>();
     public GameObject target;
 
 	void Start ()	
@@ -37,12 +37,14 @@ public class MoveRange : MonoBehaviour
                 GameObject cell = Instantiate(Resources.Load("Etc/MoveRangeCell")) as GameObject;
                 cell.transform.parent = transform;
                 cell.transform.localPosition = pos;
-                moveCells.Add(cell);
+                cells.Add(cell);
                 cell.SetActive(false);
             }
         }
     }
-	// Update is called once per frame
+
+
+
 	void Update () {
 	
 	}
@@ -50,20 +52,25 @@ public class MoveRange : MonoBehaviour
     public void ShowMoveRange(int moveRange)
     {
         transform.position = target.transform.position;
-        moveCells.ForEach(x => x.SetActive(false));
+        cells.ForEach(x => x.SetActive(false));
 
         SearchMoveRangeRecursive(target.transform.position, 0, moveRange);
     }
 
+    public void ShowActionRange(int actionRange)
+    {
+        
+    }
+
     public void HideMoveRange()
     {
-        moveCells.ForEach(x => x.SetActive(false));
+        cells.ForEach(x => x.SetActive(false));
     }
 
     private void SearchMoveRangeCell(Vector3 checkPos)
     {
         GameObject findCell 
-            = moveCells.Find(x => x.transform.position.x.Equals(checkPos.x)
+            = cells.Find(x => x.transform.position.x.Equals(checkPos.x)
                 && x.transform.position.z.Equals(checkPos.z));
 
         if (findCell != null)

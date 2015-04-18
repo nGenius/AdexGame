@@ -15,6 +15,11 @@ public class TacticeScene : MonoBehaviour
     public delegate void MouseLButtonDownEvent(RaycastHit rayCastHit);
     public event MouseLButtonDownEvent mouseLButtonEvent;
 
+    public delegate void CharacterSelectedEvent();
+    public event CharacterSelectedEvent characterSelectedEvent;
+
+    public delegate void CharacterMoveStartedEvent();
+    public event CharacterMoveStartedEvent characterMoveStartedEvent;
 
 
     // Use this for initialization
@@ -70,9 +75,13 @@ public class TacticeScene : MonoBehaviour
             if (rayCastHit.transform.tag == "Player")
             {
                 TacticePlayer tacticePlayer = rayCastHit.transform.GetComponent<TacticePlayer>();
-                moveRange.ShowMoveRange(tacticePlayer.moveRange);
                 selectedTacticePlayer = tacticePlayer;   
                 MessageDispatcher.Instance().DispatchMessage(0.0f, null, tacticePlayer.GetAIAgent(), AIMsgType.MSG_SELECTED);
+
+                if (characterSelectedEvent != null)
+                {
+                    characterSelectedEvent();
+                }
             }
             else if (rayCastHit.transform.tag == "MoveRange")
             {
@@ -89,10 +98,25 @@ public class TacticeScene : MonoBehaviour
                         Stack<PathNode> paths = pathFinding.FindPath(nodes, selectedTacticePlayer.currentNode, mapTile.pathNode);
                         selectedTacticePlayer.MoveToPaths(paths);
                         moveRange.HideMoveRange();
+
+                        if (characterMoveStartedEvent != null)
+                        {
+                            characterMoveStartedEvent();
+                        }
                     }
                 }
             }
         }
+    }
+
+    public void ShowMoveRange()
+    {
+        moveRange.ShowMoveRange(selectedTacticePlayer.moveRange);
+    }
+
+    public void ShowActionRange()
+    {
+        moveRange.ShowMoveRange(selectedTacticePlayer.moveRange);
     }
 }
     
