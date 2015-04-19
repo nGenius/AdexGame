@@ -41,7 +41,6 @@ public class PathFinding
 
         while (openList.Find(x => x.Equals(goalNode)) == null) 
         {
-            Debug.Log(currentLowFNode.Equals(goalNode));
             closeList.Add(currentLowFNode);
 
             //대각선 이동은 없으므로 g값은 1로 한다.

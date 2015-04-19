@@ -1,11 +1,12 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 
 public class UIInGame : MonoBehaviour
 {
     public TacticeScene tacticeScene;
     public GameObject commandMenu;
-	
+    public UILabel stateLabel;
 	void Start () {
 	    commandMenu.SetActive(false);
 
@@ -22,7 +23,12 @@ public class UIInGame : MonoBehaviour
 	}
 
 	void Update () {
-	
+
+	    if (tacticeScene.selectedTacticePlayer)
+	    {
+	        PlayerState state = tacticeScene.selectedTacticePlayer.GetCurrentState();
+	        stateLabel.text = state.GetType().ToString();
+	    }
 	}
 
     public void SetActiveCommandMenu(bool value)
@@ -37,6 +43,8 @@ public class UIInGame : MonoBehaviour
 
     public void OnClickActionCommand()
     {
-        tacticeScene.ShowMoveRange();
+        tacticeScene.ShowActionRange();
     }
+
+   
 }

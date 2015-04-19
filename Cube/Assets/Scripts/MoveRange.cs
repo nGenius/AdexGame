@@ -59,7 +59,10 @@ public class MoveRange : MonoBehaviour
 
     public void ShowActionRange(int actionRange)
     {
-        
+        transform.position = target.transform.position;
+        cells.ForEach(x => x.SetActive(false));
+
+        SearchMoveRangeRecursive(target.transform.position, 0, actionRange);
     }
 
     public void HideMoveRange()

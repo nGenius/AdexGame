@@ -76,7 +76,8 @@ public class TacticeScene : MonoBehaviour
             {
                 TacticePlayer tacticePlayer = rayCastHit.transform.GetComponent<TacticePlayer>();
                 selectedTacticePlayer = tacticePlayer;   
-                MessageDispatcher.Instance().DispatchMessage(0.0f, null, tacticePlayer.GetAIAgent(), AIMsgType.MSG_SELECTED);
+                MessageDispatcher.Instance().DispatchMessage(0.0f, null, tacticePlayer.GetAIAgent(), 
+                    AIMsgType.MSG_SELECTED);
 
                 if (characterSelectedEvent != null)
                 {
@@ -89,34 +90,40 @@ public class TacticeScene : MonoBehaviour
             }
             else if (rayCastHit.transform.tag == "PathNode")
             {
-                if (selectedTacticePlayer != null && selectedTacticePlayer.Movabable())
+                if (selectedTacticePlayer)
                 {
                     MapTile mapTile = rayCastHit.transform.GetComponent<MapTile>();
-                    float distance = pathFinding.distanceToGoal(selectedTacticePlayer.currentNode, mapTile.pathNode);
-                    if (distance <= selectedTacticePlayer.moveRange)
-                    {
-                        Stack<PathNode> paths = pathFinding.FindPath(nodes, selectedTacticePlayer.currentNode, mapTile.pathNode);
-                        selectedTacticePlayer.MoveToPaths(paths);
-                        moveRange.HideMoveRange();
+                    Stack<PathNode> paths = pathFinding.FindPath(nodes, selectedTacticePlayer.currentNode, mapTile.pathNode);
+                    float distance = GetDistanceNodeToNode(selectedTacticePlayer.currentNode, mapTile.pathNode);
+                    MessageDispatcher.Instance().DispatchMessage(0.0f, null, selectedTacticePlayer.GetAIAgent(), 
+                        AIMsgType.MSG_PICKED_NODE, paths, distance, mapTile.pathNode);
 
-                        if (characterMoveStartedEvent != null)
-                        {
-                            characterMoveStartedEvent();
-                        }
+                    moveRange.HideMoveRange();                                                                         
+
+                    if (characterMoveStartedEvent != null)
+                    {
+                        characterMoveStartedEvent();                                                                                                                                                   
                     }
                 }
             }
         }
     }
 
+    public float GetDistanceNodeToNode(PathNode n1, PathNode n2)
+    {
+        return pathFinding.distanceToGoal(n1, n2);
+    }
+
     public void ShowMoveRange()
     {
         moveRange.ShowMoveRange(selectedTacticePlayer.moveRange);
+        MessageDispatcher.Instance().DispatchMessage(0.0f, null, selectedTacticePlayer.GetAIAgent(), AIMsgType.MSG_PRESS_MOVE_BTN);
     }
 
     public void ShowActionRange()
     {
-        moveRange.ShowMoveRange(selectedTacticePlayer.moveRange);
+        moveRange.ShowActionRange(1);
+        MessageDispatcher.Instance().DispatchMessage(0.0f, null, selectedTacticePlayer.GetAIAgent(), AIMsgType.MSG_PRESS_ATTACK_BTN);
     }
 }
     
