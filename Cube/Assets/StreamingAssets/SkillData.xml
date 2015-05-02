@@ -5,4 +5,7 @@
   <Skill ID="3" AttackableRange="0" AttackRange="111" AnimationName="" ProjectileResource="" />
   <Skill ID="4" AttackableRange="0" AttackRange="0" AnimationName="" ProjectileResource="" />
   <Skill ID="5" AttackableRange="1113" AttackRange="33" AnimationName="sdfasd" ProjectileResource="afsdf" />
+  <Skill ID="6" AttackableRange="0" AttackRange="0" AnimationName="" ProjectileResource="" />
+  <Skill ID="7" AttackableRange="0" AttackRange="0" AnimationName="save1" ProjectileResource="" />
+  <Skill ID="8" AttackableRange="0" AttackRange="0" AnimationName="save2" ProjectileResource="" />
 </SkillData>

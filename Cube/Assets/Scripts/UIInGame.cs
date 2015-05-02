@@ -2,6 +2,9 @@
 using UnityEngine;
 using System.Collections;
 
+
+
+
 public class UIInGame : MonoBehaviour
 {
     public TacticeScene tacticeScene;
