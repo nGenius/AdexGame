@@ -23,7 +23,7 @@ public class TacticePlayer : MonoBehaviour
     public bool isEnemy;
 
     private Animator animator;
-
+    private JobClass jobClass;
     //ai 
     private AIAgent aiAgent = new AIAgent();
 

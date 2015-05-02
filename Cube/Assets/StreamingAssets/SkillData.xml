@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<SkillData>
+  <Skill ID="1" AttackableRange="333" AttackRange="111" AnimationName="save" ProjectileResource="" />
+  <Skill ID="2" AttackableRange="0" AttackRange="333" AnimationName="" ProjectileResource="rrrrttt" />
+  <Skill ID="3" AttackableRange="0" AttackRange="111" AnimationName="" ProjectileResource="" />
+  <Skill ID="4" AttackableRange="0" AttackRange="0" AnimationName="" ProjectileResource="" />
+  <Skill ID="5" AttackableRange="1113" AttackRange="33" AnimationName="sdfasd" ProjectileResource="afsdf" />
+</SkillData>

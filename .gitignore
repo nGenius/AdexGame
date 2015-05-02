@@ -6,3 +6,4 @@ Cube/UnityVS.Cube.CSharp.csproj
 Cube/UnityVS.Cube.sln
 Cube/UnityVS.Cube.v12.suo
 Cube/ProjectSettings
+*.csproj
